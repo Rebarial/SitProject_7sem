@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <meta charset="UTF-8">
+    <title>клиент&менеджер</title>
+</head>
+<body>
+
+<div class="searchBlock">
+«АвтоОпт»
+</div>
+<div>
+    <input type="button" value="На главную" onClick="document.location = '/clientmanager?action=index'"/>
+</div>
+<div class="divCenter">
+    Выбранный продукт: {{product.loc[0, 'mark_name']}} {{product.loc[0, 'model']}}, цвет: {{product.loc[0, 'color']}}, тип кузова: {{product.loc[0, 'body_type_name']}},
+    тип двигателя: {{product.loc[0, 'engine_type_name']}}, объем двигателя: {{product.loc[0, 'engine_capacity']}}, цена: {{product.loc[0, 'cost']}}
+</div>
+<div class="block-left">
+<h1>Клиент</h1>
+        <form action="{{ url_for('clientmanager') }}" method="get">
+        <input placeholder="ФИО" type = text name=client_name value="{{client_name}}">
+        <input class="clientInput" placeholder="серия"  type = text name=series value={{series}}>
+            <input class="clientInput" placeholder="номер" type = text name=number value={{number}}>
+        <input type=submit name="action" value=Поиск>
+        <input type=submit name="action" value=Добавить>
+    </form>
+{% set n = len(client) %}
+    {% if client_id %}
+ <div class="celCheck">
+     <div class="cel_content">
+ {% for name in target_client.dtypes.index %}
+{% if name != 'client_id' %}
+{{ target_client.loc[0, name] }}
+{% endif %}
+ {% endfor %}
+         </div>
+     <div class="cel_button">
+     <input type="button" value="Выбрать" onClick="document.location = '/clientmanager?client_id={{target_client.loc[0, 'client_id']}}'"/>
+          </div>
+</div>
+    {% endif %}
+ {% for i in range(n) %}
+ <div class="cel">
+     <div class="cel_content">
+ {% for name in client.dtypes.index %}
+{% if name != 'client_id' %}
+{{ client.loc[i, name] }}
+{% endif %}
+ {% endfor %}
+         </div>
+     <div class="cel_button">
+     <input type="button" value="Выбрать" onClick="document.location = '/clientmanager?client_id={{client.loc[i, 'client_id']}}'"/>
+          </div>
+</div>
+
+ {% endfor %}
+</div>
+<div class="block-right">
+<h1>Менеджер</h1>
+    <form action="{{ url_for('clientmanager') }}" method="get">
+        <input class="managerInput" placeholder="ФИО" type = text name=manager_name value="{{manager_name}}">
+        <input placeholder="макс занятость" type = text name=maxcount value="{{maxcount}}">
+        <input type=submit name="action" value=Поиск>
+    </form>
+{% set n = len(manager) %}
+    {% if manager_id %}
+<div class="celCheck">
+     <div class="cel_content">
+
+{{ target_manager.loc[0, 'name'] }}
+          (Активных клиентов: {{ target_manager.loc[0, 'count'] }})
+
+         </div>
+     <div class="cel_button">
+     <input type="button" value="Выбрать" onClick="document.location = '/clientmanager?manager_id={{target_manager.loc[0, 'manager_id']}}'"/>
+          </div>
+</div>
+    {% endif %}
+ {% for i in range(n) %}
+ <div class="cel">
+     <div class="cel_content">
+ {{ manager.loc[i, 'name'] }}
+           (Активных клиентов: {{ manager.loc[i, 'count'] }})
+
+     </div>
+     <div class="cel_button">
+     <input  type="button" value="Выбрать" onClick="document.location = '/clientmanager?manager_id={{manager.loc[i, 'manager_id']}}'"/>
+     </div>
+ </div>
+
+ {% endfor %}
+</div>
+</body>
+</html>
