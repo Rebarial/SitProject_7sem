@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <meta charset="UTF-8">
+    <title>«АвтоОпт» Товары</title>
+</head>
+<body>
+<div class="searchBlock">
+«АвтоОпт» товары
+</div>
+<div>
+    <input type="button" value="На главную" onClick="document.location = '/'"/>
+</div>
+
+
+
+<div class="divTable">
+<table>
+    <tr>
+{% for name in title_list %}
+<th>{{name}}</th>
+    {% endfor %}</tr>
+    <tr>
+        <form action="{{ url_for('product') }}" method="get">
+            <td>
+            </td>
+            <td>
+                <input class="smallInput" type = text name=color>
+            </td>
+            <td>
+                <select name = mark class="smallInput">
+                    <option value=''></option>
+                    {% for i in range(len(mark)) %}
+                <option value={{ mark.loc[i, "mark_name"] }}>
+                    {{ mark.loc[i, "mark_name"] }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td>
+                <input class="smallInput" type = text name=model>
+            </td>
+            <td>
+                <input class="smallInput" type = text name=year_of_release>
+            </td>
+            <td>
+                <input class="smallInput" type = text name=country>
+            </td>
+            <td>
+                <select name = body_type class="smallInput">
+                    <option value=''></option>
+                    {% for i in range(len(body)) %}
+                <option value={{ body.loc[i, "body_type_name"] }}>
+                    {{ body.loc[i, "body_type_name"] }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td>
+                <select name = engine_type class="smallInput">
+                    <option value=''></option>
+                    {% for i in range(len(engine)) %}
+                <option value={{ engine.loc[i, "engine_type_name"] }}>
+                    {{ engine.loc[i, "engine_type_name"] }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td>
+                <input class="smallInput" type = text name=number_of_doors>
+            </td>
+            <td>
+                <input class="smallInput" type = text name=number_of_seats>
+            </td>
+            <td>
+                <input class="smallInput" type = text name=engine_capacity>
+            </td>
+            <td>
+                <input class="smallInput" type = text name=cost>
+            </td>
+            <td>
+                <input class="smallInput" type=submit name="action" value=Поиск>
+            </td>
+        </form>
+    </tr>
+    {% for i in range(len(products)) %}
+    <tr>
+        {% for name in products.dtypes.index %}
+        <td>
+            {{ products.loc[i, name] }}
+        </td>
+        {% endfor %}
+        <td>
+            <input class="smallInput" type="button" value="Выбрать" onClick="document.location = '/clientmanager?product_id={{products.loc[i, "product_id"]}}'"/>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+    </div>
+
+</body>
+</html>

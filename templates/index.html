@@ -1,0 +1,112 @@
+<html>
+<head>
+ <link rel="stylesheet" href="/static/css/style.css">
+ <title> «АвтоОпт» </title>
+ {% macro radioBut_render(combo_l, nameId) %}
+ <h2>{{nameId}}</h2>
+
+  {% set n = len(combo_l) %}
+  {% for i in range(n) %}
+  <p>
+   {% set check = combo_l.loc[i, 'check'] %}
+   {% if check == 1 %}
+    <input type="checkbox" checked=checked> {% set nameS = combo_l.loc[i, nameId] %} {{nameS}}
+   {% else %}
+    <input type="checkbox"> {% set nameS = combo_l.loc[i, nameId] %} {{nameS}}
+   {% endif %}
+ </p>
+  {% endfor %}
+
+
+ {% endmacro %}
+</head>
+<body>
+<div class="searchBlock">
+«АвтоОпт»
+</div>
+<div class="filter">
+ <header>Фильтры</header>
+ <form action="{{ url_for('index') }}" method="get">
+ <p>Имя клиента: <input type = text name=client_name value='{{client_name}}'></p>
+ <p>Имя менеджера: <input type = text name=manager_name value='{{manager_name}}'></p>
+  <p>Контракт: <p>От <input placeholder="диапозон начало" type = date name=contract_begin value='{{contract_begin}}'><p>
+   До <input placeholder="диапозон конец" type = date name=contract_end value='{{contract_end}}'></p>
+  <p>Этапы:</p>
+  {% if 'None' in stage_select %}
+  <input type = checkbox name=stage[] value=None checked="checked">
+  None<br>
+  {% else %}
+  <input type = checkbox name=stage[] value=None>
+  None<br>
+  {% endif %}
+  {% for i in range(len(stage)) %}
+   {% if stage.loc[i, 'stage_name'] in stage_select %}
+  <input type = checkbox name=stage[] value="{{stage.loc[i, 'stage_name']}}" checked="checked">
+  {{stage.loc[i, 'stage_name']}}<br>
+  {% else %}
+  <input type = checkbox name=stage[] value="{{stage.loc[i, 'stage_name']}}">
+  {{stage.loc[i, 'stage_name']}}<br>
+  {% endif %}
+  {% endfor %}
+  <p><input type=submit name="action" value=Поиск></p>
+  <p><input type=submit name="action" value=Отчет></p>
+ <p><input type="submit" name="action" value="Очистить"></p>
+  </form>
+</div>
+
+
+ {% set n = len(work) %}
+
+ {% for i in range(n) %}
+ <div class="item">
+ {% for name in work.dtypes.index %}
+{% if name != 'work_id' %}
+<p>
+ {{name}} : {{ work.loc[i, name] }}
+</p>
+
+  {% endif %}
+ {% endfor %}
+    <input type="button" value="Этапы" onClick="document.location = '/stage?work_id={{work.loc[i, 'work_id']}}'"/>
+    <input type="button" value="Договор" onClick="document.location = '?contract=yes&work_id={{work.loc[i, 'work_id']}}'"/>
+  <input type="button" value="Удалить" onClick="document.location = '?delete={{work.loc[i, 'work_id']}}'"/>
+</div>
+
+ {% endfor %}
+<a href="/product">
+ <div class="add">
+
+
+</div>
+</a>
+
+{% if action_i == 'contract' %}
+<div class="hystmodal" id="myModal">
+    <div class="hystmodal__window">
+     <s1>Предупреждение!</s1>
+     <br>
+     При подтверждении создатся новый договор.
+     <br>
+      <input type="button" value="Ок" onClick="document.location = '/contract?work_id={{work_id}}'"/>
+      <input type="button" value="Отмена" onClick="document.location = '/'"/>
+    </div>
+</div>
+{% endif %}
+
+
+{% if action_i == 'Отчет' %}
+<div class="hystmodal" id="myModal">
+    <div class="hystmodal__window">
+     <s1>Отчет</s1>
+     <br>
+     Активных процессов:{{cnt_no_contracts}}<br>
+     Заключено контрактов: {{cnt_contracts}}<br>
+     Сумма: {{sum_contracts}}
+     <br>
+      <input type="button" value="Ок" onClick="document.location = '/'"/>
+    </div>
+</div>
+{% endif %}
+
+</body>
+</html>

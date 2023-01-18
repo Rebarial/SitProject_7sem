@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <meta charset="UTF-8">
+    <title>«АвтоОпт» Договор</title>
+</head>
+<body>
+<div class="searchBlock">
+«АвтоОпт» договор
+</div>
+<input type="button" value="На главную" onClick="document.location = '/'"/>
+<h1>Договор N {{contract_id}}</h1>
+Место заключения договора: {{place}}.
+<br>
+Время:{{data_of_create}}; продавец: Автомагазин «АвтоОпт».
+<br>
+Покупатель: {{client_name}}; паспорт серия {{client_series}} № {{client_number}}
+<br>
+По настоящему договору покупатель обязуется принять и оплатить, а продавец
+обязуется передать в собственность следующее транспортное средство:
+<br>
+Марка, модель: {{car_mark_model}}; цвет: {{car_color}}; тип: {{car_body}};
+<br>
+Тип двигателя: {{car_engine}}; год изготовления: {{year_of_release}}; страна изготовления: {{car_country}}.
+<br>
+ <form action="/contract" method="get">
+Способ оплаты:
+
+<select name = payment_type>
+{% if payment_type == "Наличные" %}
+<option value=Наличные selected="selected">Наличные</option>
+{% else %}
+<option value=Наличные>Наличные</option>
+{% endif %}
+{% if payment_type == "Карта" %}
+<option value=Карта selected="selected">Карта</option>
+{% else %}
+<option value=Карта>Карта</option>
+{% endif %}
+{% if payment_type == "Кредит" %}
+<option value=Кредит selected="selected">Кредит</option>
+{% else %}
+<option value=Кредит>Кредит</option>
+{% endif %}
+</select>
+<input type="hidden" name="work_id" value={{work_id}} />
+
+ Цена: {{cost}}р
+     <br>
+     <br>
+     <input type=submit name="action" value=Изменить >
+     <input type=submit name="action" value=Удалить>
+ </form>
+</body>
+</html>

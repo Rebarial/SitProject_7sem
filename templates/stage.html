@@ -1,0 +1,70 @@
+<html>
+<head>
+ <link rel="stylesheet" href="/static/css/style.css">
+ <title> «АвтоОпт» </title>
+ {% macro radioBut_render(combo_l, nameId) %}
+ <h2>{{nameId}}</h2>
+
+  {% set n = len(combo_l) %}
+  {% for i in range(n) %}
+  <p>
+   {% set check = combo_l.loc[i, 'check'] %}
+   {% if check == 1 %}
+    <input type="checkbox" checked=checked> {% set nameS = combo_l.loc[i, nameId] %} {{nameS}}
+   {% else %}
+    <input type="checkbox"> {% set nameS = combo_l.loc[i, nameId] %} {{nameS}}
+   {% endif %}
+ </p>
+  {% endfor %}
+
+
+ {% endmacro %}
+
+{% macro render_table(relation) %}
+
+ {% set n = len(relation) %}
+
+ {% for i in range(n) %}
+ <div class="item">
+ {% for name in relation.dtypes.index %}
+{% if name != 'work_id' and name != 'stage_id' %}
+<p>
+ {{name}} : {{ relation.loc[i, name] }}
+</p>
+  {% endif %}
+ {% endfor %}
+    <input type="button" value="Поставить дату" onClick="document.location = '/stage?action=date&work_id={{relation.loc[i, 'work_id']}}&stage_id={{relation.loc[i, 'stage_id']}}'"/>
+  <input type="button" value="Удалить дату" onClick="document.location = '/stage?action=delete&work_id={{relation.loc[i, 'work_id']}}&stage_id={{relation.loc[i, 'stage_id']}}'"/>
+</div>
+
+ {% endfor %}
+
+
+</div>
+</a>
+{% endmacro %}
+</head>
+<body>
+<div class="searchBlock">
+«АвтоОпт» Этапы
+</div>
+<div>
+    <input type="button" value="На главную" onClick="document.location = '/clientmanager?action=index'"/>
+ Имя клиента: {{work.loc[0, 'client_name']}}, имя менеджера: {{work.loc[0, 'manager_name']}}, продукт: {{work.loc[0, 'mark_name']}} {{work.loc[0, 'model_name']}}
+</div>
+ {{ render_table(stage) }}
+{% if contract == None %}
+<div class="hystmodal" id="myModal">
+    <div class="hystmodal__window">
+     <s1>Предупреждение!</s1>
+     <br>
+     При подтверждении создатся новый договор.
+     <br>
+      <input type="button" value="Ок" onClick="document.location = '/contract?work_id={{work_id}}'"/>
+      <input type="button" value="Отмена" onClick="document.location = '/'"/>
+    </div>
+</div>
+{% endif %}
+
+</body>
+</html>
